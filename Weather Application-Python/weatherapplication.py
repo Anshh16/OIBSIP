@@ -14,38 +14,41 @@ mainwin.config(bg="#EFE7BC")
 mainwin.resizable(False,False)
 
 def weather():
-    city=locentry.get()
-    geolocator=Nominatim(user_agent="geoapiExercises")
-    location=geolocator.geocode(city)
-    obj=TimezoneFinder()
-    result=obj.timezone_at(lng=location.longitude, lat=location.latitude)
-    home=pytz.timezone(result) 
-    localtime=datetime.now(home)
-    currenttime=localtime.strftime("%I:%M %p")
-    clock.config(text=currenttime)
-    name.config(text="WEATHER  DETAILS")
-    api="https://api.openweathermap.org/data/2.5/weather?q="+city+"&appid=693e4a99b744aa480bc41da725f5d15c"
-    json_data=requests.get(api).json()
-    condition=json_data['weather'][0]['main']
-    temp= int(json_data['main']['temp']-273.15)
-    pressure=json_data['main']['pressure']
-    humidity=json_data['main']['humidity']
-    wind=json_data['wind']['speed']
-    temperature.config(text=(temp,"°C"))
-    if temp>35:
-        condi.config(text=(condition,"|","FEELS","LIKE","TOO","HOT","!"))
-    elif temp>27 and temp<=35:
-        condi.config(text=(condition,"|","FEELS","LIKE","MODERATELY","HOT","!"))
-    elif temp>20 and temp<=27:
-        condi.config(text=(condition,"|","FEELS","LIKE","MODERATE","."))
-    elif temp>10 and temp<=20:
-        condi.config(text=(condition,"|","FEELS","LIKE","COLD","!"))
-    else:
-        condi.config(text=(condition,"|","FEELS","LIKE","ICY","COLD","!"))
-    wl.config(text=wind)
-    hl.config(text=humidity)
-    dl.config(text=condition)
-    pl.config(text=pressure)
+    try:
+        city=locentry.get()
+        geolocator=Nominatim(user_agent="geoapiExercises")
+        location=geolocator.geocode(city)
+        obj=TimezoneFinder()
+        result=obj.timezone_at(lng=location.longitude, lat=location.latitude)
+        home=pytz.timezone(result) 
+        localtime=datetime.now(home)
+        currenttime=localtime.strftime("%I:%M %p")
+        clock.config(text=currenttime)
+        name.config(text="WEATHER  DETAILS")
+        api="https://api.openweathermap.org/data/2.5/weather?q="+city+"&appid=693e4a99b744aa480bc41da725f5d15c"
+        json_data=requests.get(api).json()
+        condition=json_data['weather'][0]['main']
+        temp= int(json_data['main']['temp']-273.15)
+        pressure=json_data['main']['pressure']
+        humidity=json_data['main']['humidity']
+        wind=json_data['wind']['speed']
+        temperature.config(text=(temp,"°C"))
+        if temp>35:
+            condi.config(text=(condition,"|","FEELS","LIKE","TOO","HOT","!"))
+        elif temp>27 and temp<=35:
+            condi.config(text=(condition,"|","FEELS","LIKE","MODERATELY","HOT","!"))
+        elif temp>20 and temp<=27:
+            condi.config(text=(condition,"|","FEELS","LIKE","MODERATE","."))
+        elif temp>10 and temp<=20:
+            condi.config(text=(condition,"|","FEELS","LIKE","COLD","!"))
+        else:
+            condi.config(text=(condition,"|","FEELS","LIKE","ICY","COLD","!"))
+        wl.config(text=wind)
+        hl.config(text=humidity)
+        dl.config(text=condition)
+        pl.config(text=pressure)
+    except Exception as e:
+        messagebox.showerror("Weather App", "Invalid Entry!") 
 
 font15=('Arial',15,'bold')
 font25=('Arial',25,'bold')
@@ -61,7 +64,7 @@ locentry.place(x=28,y=28)
 locentry.focus()
 
 searchicon=PhotoImage(file="D:/Weather Application-Python/searchicon.png")
-searchicbutton=Button(image=searchicon, border=0, cursor='hand2', backgromeerutund='#FA8072', activebackground='#FA8072', command=weather)
+searchicbutton=Button(image=searchicon, border=0, cursor='hand2', background='#FA8072', activebackground='#FA8072', command=weather)
 searchicbutton.place(x=410,y=25)
 
 logoimg=PhotoImage(file="D:/Weather Application-Python/logo2.png")
